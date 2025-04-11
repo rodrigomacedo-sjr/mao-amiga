@@ -1,2 +1,2 @@
-# mao-amiga
+# Mão Amiga
 Projeto de Engenharia de Software
