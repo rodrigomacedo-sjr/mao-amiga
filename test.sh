@@ -14,4 +14,5 @@ echo "Compilando..."
 ./mvnw clean compile -q || exit 1
 
 echo "Executando testes..."
-./mvnw test -Dspring.profiles.active=test
+export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED"
+./mvnw test -Dspring.profiles.active=test -Dlogging.level.sun.misc.Unsafe=OFF

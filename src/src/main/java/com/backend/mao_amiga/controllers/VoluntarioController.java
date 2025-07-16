@@ -188,4 +188,42 @@ public class VoluntarioController {
 
         return ResponseEntity.ok(estatisticas);
     }
+
+    @PostMapping("/{voluntarioId}/favoritar-evento/{eventoId}")
+    public ResponseEntity<Voluntario> favoritarEvento(
+            @PathVariable UUID voluntarioId, 
+            @PathVariable UUID eventoId) {
+        
+        Voluntario voluntario = voluntarios.get(voluntarioId);
+        if (voluntario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        voluntario.favoritarEvento(eventoId);
+        return ResponseEntity.ok(voluntario);
+    }
+
+    @DeleteMapping("/{voluntarioId}/desfavoritar-evento/{eventoId}")
+    public ResponseEntity<Voluntario> desfavoritarEvento(
+            @PathVariable UUID voluntarioId, 
+            @PathVariable UUID eventoId) {
+        
+        Voluntario voluntario = voluntarios.get(voluntarioId);
+        if (voluntario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        voluntario.desfavoritarEvento(eventoId);
+        return ResponseEntity.ok(voluntario);
+    }
+
+    @GetMapping("/{id}/historico-eventos")
+    public ResponseEntity<List<UUID>> obterHistoricoEventos(@PathVariable UUID id) {
+        Voluntario voluntario = voluntarios.get(id);
+        if (voluntario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(voluntario.getHistoricoDeEventos());
+    }
 }

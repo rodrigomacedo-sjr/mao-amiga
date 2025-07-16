@@ -13,4 +13,5 @@ echo "Compilando..."
 ./mvnw clean compile -q || exit 1
 
 echo "Executando em http://localhost:8080"
-./mvnw spring-boot:run -q
+export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED"
+./mvnw spring-boot:run -q -Dlogging.level.sun.misc.Unsafe=OFF
