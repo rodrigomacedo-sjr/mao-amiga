@@ -222,7 +222,7 @@ public class EventoController {
     }
 
     @GetMapping("/{id}/voluntarios-inscritos")
-    public ResponseEntity<Set<UUID>> listarVoluntariosInscritos(@PathVariable UUID id) {
+    public ResponseEntity<Set<UUID>> obterVoluntariosInscritos(@PathVariable UUID id) {
         Evento evento = eventos.get(id);
         if (evento == null) {
             return ResponseEntity.notFound().build();
@@ -308,5 +308,41 @@ public class EventoController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("/{eventoId}/marcar-presenca/{voluntarioId}")
+    public ResponseEntity<Evento> marcarPresenca(
+            @PathVariable UUID eventoId,
+            @PathVariable UUID voluntarioId) {
+        
+        Evento evento = eventos.get(eventoId);
+        if (evento == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boolean sucesso = evento.marcarPresenca(voluntarioId);
+        if (!sucesso) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(evento);
+    }
+
+    @GetMapping("/futuros")
+    public ResponseEntity<List<Evento>> listarEventosFuturos() {
+        List<Evento> eventosFuturos = eventos.values().stream()
+                .filter(evento -> evento.estaNoFuturo())
+                .toList();
+        
+        return ResponseEntity.ok(eventosFuturos);
+    }
+
+    @GetMapping("/por-ong/{ongId}")
+    public ResponseEntity<List<Evento>> buscarEventosPorOng(@PathVariable UUID ongId) {
+        List<Evento> eventosDaOng = eventos.values().stream()
+                .filter(evento -> evento.getOngResponsavelId().equals(ongId))
+                .toList();
+        
+        return ResponseEntity.ok(eventosDaOng);
     }
 }

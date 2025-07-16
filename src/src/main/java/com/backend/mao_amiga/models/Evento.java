@@ -242,6 +242,10 @@ public class Evento {
         return this.voluntariosParticiparam;
     }
 
+    public void setStatus(StatusEvento status) {
+        this.status = status;
+    }
+
     // Getters essenciais
     public UUID getId() {
         return id;

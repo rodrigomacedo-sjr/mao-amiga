@@ -148,7 +148,7 @@ public class VoluntarioController {
     }
 
     @GetMapping("/{id}/ongs-seguidas")
-    public ResponseEntity<Set<UUID>> listarOngsSeguidas(@PathVariable UUID id) {
+    public ResponseEntity<Set<UUID>> obterOngsSeguidas(@PathVariable UUID id) {
         Voluntario voluntario = voluntarios.get(id);
         if (voluntario == null) {
             return ResponseEntity.notFound().build();
@@ -157,51 +157,35 @@ public class VoluntarioController {
         return ResponseEntity.ok(voluntario.getOngsSeguidas());
     }
 
-    @PostMapping("/{voluntarioId}/favoritar-evento/{eventoId}")
-    public ResponseEntity<Voluntario> favoritarEvento(
-            @PathVariable UUID voluntarioId, 
-            @PathVariable UUID eventoId) {
-        
-        Voluntario voluntario = voluntarios.get(voluntarioId);
-        if (voluntario == null) {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/buscar-por-area/{area}")
+    public ResponseEntity<List<Voluntario>> buscarVoluntariosPorArea(@PathVariable String area) {
+        try {
+            AreaInteresse areaEnum = AreaInteresse.valueOf(area);
+            List<Voluntario> voluntariosPorArea = voluntarios.values().stream()
+                    .filter(voluntario -> voluntario.temInteresseNaArea(areaEnum))
+                    .toList();
+            
+            return ResponseEntity.ok(voluntariosPorArea);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
-
-        voluntario.favoritarEvento(eventoId);
-        return ResponseEntity.ok(voluntario);
     }
 
-    @DeleteMapping("/{voluntarioId}/desfavoritar-evento/{eventoId}")
-    public ResponseEntity<Voluntario> desfavoritarEvento(
-            @PathVariable UUID voluntarioId, 
-            @PathVariable UUID eventoId) {
-        
-        Voluntario voluntario = voluntarios.get(voluntarioId);
-        if (voluntario == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        voluntario.desfavoritarEvento(eventoId);
-        return ResponseEntity.ok(voluntario);
-    }
-
-    @GetMapping("/{id}/eventos-favoritos")
-    public ResponseEntity<Set<UUID>> listarEventosFavoritos(@PathVariable UUID id) {
+    @GetMapping("/{id}/estatisticas")
+    public ResponseEntity<Map<String, Object>> obterEstatisticas(@PathVariable UUID id) {
         Voluntario voluntario = voluntarios.get(id);
         if (voluntario == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(voluntario.getEventosFavoritos());
-    }
+        Map<String, Object> estatisticas = new HashMap<>();
+        estatisticas.put("quantidadeEventosParticipados", voluntario.getQuantidadeEventosParticipados());
+        estatisticas.put("quantidadeAreasDeInteresse", voluntario.getAreasDeInteresse().size());
+        estatisticas.put("quantidadeOngsSeguidas", voluntario.getOngsSeguidas().size());
+        estatisticas.put("quantidadeEventosFavoritos", voluntario.getEventosFavoritos().size());
+        estatisticas.put("areasDeInteresse", voluntario.getAreasDeInteresse());
+        estatisticas.put("nota", voluntario.getNota());
 
-    @GetMapping("/{id}/historico-eventos")
-    public ResponseEntity<List<UUID>> listarHistoricoEventos(@PathVariable UUID id) {
-        Voluntario voluntario = voluntarios.get(id);
-        if (voluntario == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(voluntario.getHistoricoDeEventos());
+        return ResponseEntity.ok(estatisticas);
     }
 }

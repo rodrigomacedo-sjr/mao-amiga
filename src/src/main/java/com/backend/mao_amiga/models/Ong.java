@@ -66,8 +66,16 @@ public class Ong extends Usuario {
     }
   }
 
+  public void adicionarAreaDeAtuacao(AreaInteresse area) {
+    adicionarAreaAtuacao(area);
+  }
+
   public void removerAreaAtuacao(AreaInteresse area) {
     this.areasDeAtuacao.remove(area);
+  }
+
+  public void removerAreaDeAtuacao(AreaInteresse area) {
+    removerAreaAtuacao(area);
   }
 
   public void adicionarEventoOrganizado(UUID eventoId) {
@@ -92,6 +100,10 @@ public class Ong extends Usuario {
 
   public void verificarOng() {
     this.verificada = true;
+  }
+
+  public void setVerificada(boolean verificada) {
+    this.verificada = verificada;
   }
 
   public int getQuantidadeSeguidores() {

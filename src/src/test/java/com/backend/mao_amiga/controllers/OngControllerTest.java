@@ -104,7 +104,11 @@ class OngControllerTest {
         ResponseEntity<Ong> ongCriada = controller.criarOng(dados);
         UUID id = ongCriada.getBody().getId();
         
-        ResponseEntity<?> response = controller.adicionarAreaAtuacao(id, "EDUCACAO");
+        // Cria mapa com a área de atuação
+        Map<String, String> areaData = new HashMap<>();
+        areaData.put("area", "EDUCACAO");
+        
+        ResponseEntity<?> response = controller.adicionarAreaAtuacao(id, areaData);
         
         assertEquals(200, response.getStatusCodeValue());
     }
@@ -143,7 +147,11 @@ class OngControllerTest {
         Map<String, String> dados = criarDadosOngValidos();
         ResponseEntity<Ong> ongCriada = controller.criarOng(dados);
         UUID id = ongCriada.getBody().getId();
-        controller.adicionarAreaAtuacao(id, "EDUCACAO");
+        
+        // Cria mapa com a área de atuação
+        Map<String, String> areaData = new HashMap<>();
+        areaData.put("area", "EDUCACAO");
+        controller.adicionarAreaAtuacao(id, areaData);
         
         ResponseEntity<?> response = controller.buscarOngsPorArea("EDUCACAO");
         

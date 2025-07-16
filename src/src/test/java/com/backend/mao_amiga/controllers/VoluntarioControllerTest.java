@@ -65,7 +65,11 @@ class VoluntarioControllerTest {
         ResponseEntity<Voluntario> voluntarioCriado = controller.criarVoluntario(dados);
         UUID id = voluntarioCriado.getBody().getId();
         
-        ResponseEntity<?> response = controller.adicionarAreaInteresse(id, "EDUCACAO");
+        // Cria mapa com a área de interesse
+        Map<String, String> areaData = new HashMap<>();
+        areaData.put("area", "EDUCACAO");
+        
+        ResponseEntity<?> response = controller.adicionarAreaInteresse(id, areaData);
         
         assertEquals(200, response.getStatusCodeValue());
     }
@@ -77,7 +81,11 @@ class VoluntarioControllerTest {
         Map<String, String> dados = criarDadosVoluntarioValidos();
         ResponseEntity<Voluntario> voluntarioCriado = controller.criarVoluntario(dados);
         UUID id = voluntarioCriado.getBody().getId();
-        controller.adicionarAreaInteresse(id, "EDUCACAO");
+        
+        // Cria mapa com a área de interesse
+        Map<String, String> areaData = new HashMap<>();
+        areaData.put("area", "EDUCACAO");
+        controller.adicionarAreaInteresse(id, areaData);
         
         ResponseEntity<?> response = controller.removerAreaInteresse(id, "EDUCACAO");
         
@@ -195,7 +203,11 @@ class VoluntarioControllerTest {
         Map<String, String> dados = criarDadosVoluntarioValidos();
         ResponseEntity<Voluntario> voluntarioCriado = controller.criarVoluntario(dados);
         UUID id = voluntarioCriado.getBody().getId();
-        controller.adicionarAreaInteresse(id, "SAUDE");
+        
+        // Cria mapa com a área de interesse
+        Map<String, String> areaData = new HashMap<>();
+        areaData.put("area", "SAUDE");
+        controller.adicionarAreaInteresse(id, areaData);
         
         ResponseEntity<?> response = controller.buscarVoluntariosPorArea("SAUDE");
         

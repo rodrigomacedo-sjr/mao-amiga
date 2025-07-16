@@ -64,4 +64,4 @@ fi
 
 echo ""
 echo "Setup concluído com sucesso!"
-echo "Execute: ./run-simple.sh"
+echo "Execute: ./run.sh"

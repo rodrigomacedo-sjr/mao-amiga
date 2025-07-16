@@ -62,8 +62,16 @@ public class Voluntario extends Usuario {
         }
     }
 
+    public void adicionarAreaDeInteresse(AreaInteresse area) {
+        adicionarAreaInteresse(area);
+    }
+
     public void removerAreaInteresse(AreaInteresse area) {
         this.areasDeInteresse.remove(area);
+    }
+
+    public void removerAreaDeInteresse(AreaInteresse area) {
+        removerAreaInteresse(area);
     }
 
     public void adicionarEventoAoHistorico(UUID eventoId) {
@@ -100,12 +108,20 @@ public class Voluntario extends Usuario {
         return this.areasDeInteresse.contains(area);
     }
 
-    public int getQuantidadeEventosParticipados() {
-        return this.historicoDeEventos.size();
+    public boolean temInteresseEm(AreaInteresse area) {
+        return this.areasDeInteresse.contains(area);
     }
 
-    public boolean jaParticipouDeEvento(UUID eventoId) {
+    public boolean jaParticipouDoEvento(UUID eventoId) {
         return this.historicoDeEventos.contains(eventoId);
+    }
+
+    public boolean eventoEstaFavoritado(UUID eventoId) {
+        return this.eventosFavoritos.contains(eventoId);
+    }
+
+    public int getQuantidadeEventosParticipados() {
+        return this.historicoDeEventos.size();
     }
 
     // Getters essenciais

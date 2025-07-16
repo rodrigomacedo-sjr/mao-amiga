@@ -169,7 +169,7 @@ public class OngController {
     }
 
     @GetMapping("/por-area/{area}")
-    public ResponseEntity<List<Ong>> listarOngsPorArea(@PathVariable String area) {
+    public ResponseEntity<List<Ong>> buscarOngsPorArea(@PathVariable String area) {
         try {
             AreaInteresse areaEnum = AreaInteresse.valueOf(area);
             List<Ong> ongsPorArea = ongs.values().stream()
@@ -197,5 +197,19 @@ public class OngController {
         estatisticas.put("nota", ong.getNota());
 
         return ResponseEntity.ok(estatisticas);
+    }
+
+    @PostMapping("/{ongId}/adicionar-seguidor/{voluntarioId}")
+    public ResponseEntity<Ong> adicionarSeguidor(
+            @PathVariable UUID ongId,
+            @PathVariable UUID voluntarioId) {
+        
+        Ong ong = ongs.get(ongId);
+        if (ong == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ong.adicionarSeguidor(voluntarioId);
+        return ResponseEntity.ok(ong);
     }
 }
