@@ -19,6 +19,10 @@ Construir um projeto simples e viável para ajudar a comunidade.
 3. Execute `./setup.sh` para configurar o ambiente
 4. Execute `./run-simple.sh` para iniciar a aplicação
 
+## Como rodar os testes
+
+Execute `./test-simple.sh` para rodar os testes automatizados
+
 ## Mais detalhes
 
 - [Controllers](CONTROLLERS_DOCS.md) - Como e por que as funcionalidades básicas de controle

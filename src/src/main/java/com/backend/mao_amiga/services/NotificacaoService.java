@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-// Service para gerenciar notificações - implementação em memória
 @Service
 public class NotificacaoService {
     

@@ -80,6 +80,10 @@ public class Notificacao {
         return lida;
     }
 
+    public Boolean isLida() {
+        return lida;
+    }
+
     public UUID getEventoRelacionadoId() {
         return eventoRelacionadoId;
     }

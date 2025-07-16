@@ -1,21 +1,52 @@
-#!/bin/bash
+#!/bin/sh
 
-echo "🐘 Setup PostgreSQL - Mão Amiga"
-echo ""
+echo "Setup - Mão Amiga"
 
-# Verificar se PostgreSQL está instalado
-if ! command -v psql &> /dev/null; then
-    echo "❌ PostgreSQL não está instalado!"
-    echo "💡 Instale com: sudo apt install postgresql postgresql-contrib"
+# Verificar Java
+if ! command -v java >/dev/null 2>&1; then
+    echo ""
+    echo "ERRO: Java não encontrado"
+    echo ""
+    echo "Instale o Java 17:"
+    echo "  Ubuntu/Debian: sudo apt install openjdk-17-jdk"
+    echo "  Fedora/RHEL:   sudo dnf install java-17-openjdk-devel"
+    echo "  Arch:          sudo pacman -S jdk17-openjdk"
+    echo ""
+    echo "Depois execute o setup novamente."
     exit 1
 fi
 
-echo "📋 Configurando banco..."
+# Verificar PostgreSQL
+if ! command -v psql >/dev/null 2>&1; then
+    echo ""
+    echo "ERRO: PostgreSQL não encontrado"
+    echo ""
+    echo "Instale o PostgreSQL:"
+    echo "  Ubuntu/Debian: sudo apt install postgresql postgresql-contrib"
+    echo "  Fedora/RHEL:   sudo dnf install postgresql postgresql-server"
+    echo "  Arch:          sudo pacman -S postgresql"
+    echo ""
+    echo "Inicie o serviço: sudo systemctl start postgresql"
+    echo "Depois execute o setup novamente."
+    exit 1
+fi
 
-# Executar comandos SQL
+# Verificar se PostgreSQL está rodando
+if ! pg_isready -h localhost -p 5432 >/dev/null 2>&1; then
+    echo ""
+    echo "ERRO: PostgreSQL não está rodando"
+    echo "Inicie: sudo systemctl start postgresql"
+    exit 1
+fi
+
+# Configurar banco
+echo "Configurando banco de dados..."
 sudo -u postgres psql << EOF
-CREATE DATABASE mao_amiga_db ENCODING 'UTF8';
-CREATE DATABASE mao_amiga_test_db ENCODING 'UTF8';
+DROP DATABASE IF EXISTS mao_amiga_db;
+DROP DATABASE IF EXISTS mao_amiga_test_db;
+DROP USER IF EXISTS mao_amiga_user;
+CREATE DATABASE mao_amiga_db;
+CREATE DATABASE mao_amiga_test_db;
 CREATE USER mao_amiga_user WITH PASSWORD 'mao_amiga_password';
 GRANT ALL PRIVILEGES ON DATABASE mao_amiga_db TO mao_amiga_user;
 GRANT ALL PRIVILEGES ON DATABASE mao_amiga_test_db TO mao_amiga_user;
@@ -23,17 +54,14 @@ ALTER USER mao_amiga_user CREATEDB;
 \q
 EOF
 
-if [ $? -eq 0 ]; then
-    echo "✅ PostgreSQL configurado!"
-    echo ""
-    echo "📊 Configuração:"
-    echo "   Database: mao_amiga_db (produção)"
-    echo "   Database: mao_amiga_test_db (testes)"
-    echo "   User: mao_amiga_user"
-    echo "   Password: mao_amiga_password"
-    echo ""
-    echo "🚀 Execute agora: ./run-simple.sh"
-else
-    echo "❌ Erro na configuração!"
-    echo "💡 Verifique se PostgreSQL está rodando: sudo systemctl start postgresql"
+# Limpar build anterior se existir
+if [ -d "src" ]; then
+    echo "Limpando build anterior..."
+    cd src
+    ./mvnw clean -q
+    cd ..
 fi
+
+echo ""
+echo "Setup concluído com sucesso!"
+echo "Execute: ./run-simple.sh"

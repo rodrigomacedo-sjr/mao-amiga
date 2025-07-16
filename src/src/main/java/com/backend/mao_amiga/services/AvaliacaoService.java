@@ -8,7 +8,6 @@ import java.util.*;
 @Service
 public class AvaliacaoService {
     
-    // Simulação de banco em memória para testes
     private final Map<UUID, Avaliacao> avaliacoes = new HashMap<>();
     private final Map<UUID, Evento> eventos = new HashMap<>();
     private final Map<UUID, Usuario> usuarios = new HashMap<>();
