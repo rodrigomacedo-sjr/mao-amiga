@@ -21,7 +21,7 @@ public class Notificacao {
     @Column(nullable = false, length = 500)
     private String mensagem;
     
-    @Column(nullable = false)
+    @Column(name = "usuario_destino_id", nullable = false)
     private UUID usuarioDestinoId;
     
     @Column(nullable = false)

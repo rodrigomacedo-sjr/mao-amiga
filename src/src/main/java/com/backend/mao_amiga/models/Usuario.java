@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import com.backend.mao_amiga.models.enums.PreferenciaTema;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -45,17 +43,12 @@ public abstract class Usuario {
     @Column(nullable = false)
     protected Boolean ativo;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_destino_id")
-    protected List<Notificacao> notificacoes;
-
     // Construtores
     public Usuario() {
         this.nota = 0.0f;
         this.preferenciaTema = PreferenciaTema.CLARO;
         this.criadoEm = LocalDateTime.now();
         this.ativo = true;
-        this.notificacoes = new ArrayList<>();
     }
 
     public Usuario(String email, String senha, String nomeCompleto) {
@@ -80,12 +73,6 @@ public abstract class Usuario {
 
     public void ativarConta() {
         this.ativo = true;
-    }
-
-    public int getQuantidadeNotificacaoNaoLidas() {
-        return (int) notificacoes.stream()
-                .filter(notificacao -> !notificacao.getLida())
-                .count();
     }
 
     // Getters essenciais
@@ -135,9 +122,5 @@ public abstract class Usuario {
 
     public Boolean getAtivo() {
         return ativo;
-    }
-
-    public List<Notificacao> getNotificacoes() {
-        return notificacoes;
     }
 }
