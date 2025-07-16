@@ -51,6 +51,32 @@ CREATE USER mao_amiga_user WITH PASSWORD 'mao_amiga_password';
 GRANT ALL PRIVILEGES ON DATABASE mao_amiga_db TO mao_amiga_user;
 GRANT ALL PRIVILEGES ON DATABASE mao_amiga_test_db TO mao_amiga_user;
 ALTER USER mao_amiga_user CREATEDB;
+
+-- Conceder permissões no schema public para evitar "permission denied"
+GRANT ALL PRIVILEGES ON SCHEMA public TO mao_amiga_user;
+GRANT CREATE ON SCHEMA public TO mao_amiga_user;
+
+-- Definir privilégios padrão para objetos futuros
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO mao_amiga_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO mao_amiga_user;
+\q
+EOF
+
+# Dar permissões no banco
+echo "Aplicando permissões específicas..."
+sudo -u postgres psql -d mao_amiga_db << EOF
+GRANT ALL PRIVILEGES ON SCHEMA public TO mao_amiga_user;
+GRANT CREATE ON SCHEMA public TO mao_amiga_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO mao_amiga_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO mao_amiga_user;
+\q
+EOF
+
+sudo -u postgres psql -d mao_amiga_test_db << EOF
+GRANT ALL PRIVILEGES ON SCHEMA public TO mao_amiga_user;
+GRANT CREATE ON SCHEMA public TO mao_amiga_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO mao_amiga_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO mao_amiga_user;
 \q
 EOF
 

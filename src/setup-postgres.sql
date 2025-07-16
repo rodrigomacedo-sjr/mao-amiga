@@ -1,6 +1,4 @@
--- Script para configurar o banco PostgreSQL para o projeto Mão Amiga
-
--- 1. Conecte-se ao PostgreSQL como superusuário (postgres)
+-- 1. Conecta no PostgreSQL como superuser
 -- psql -U postgres
 
 -- 2. Criar o banco de dados
@@ -18,12 +16,15 @@ CREATE USER mao_amiga_user WITH PASSWORD 'mao_amiga_password';
 
 -- 4. Conceder privilégios ao usuário
 GRANT ALL PRIVILEGES ON DATABASE mao_amiga_db TO mao_amiga_user;
+-- Permitir criação de novas tabelas e objetos
+ALTER USER mao_amiga_user CREATEDB;
 
 -- 5. Conectar ao banco criado
 \c mao_amiga_db;
 
 -- 6. Conceder privilégios no schema public
 GRANT ALL ON SCHEMA public TO mao_amiga_user;
+GRANT CREATE ON SCHEMA public TO mao_amiga_user;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO mao_amiga_user;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO mao_amiga_user;
 
